@@ -1,12 +1,13 @@
 import React from 'react';
 import Cycles from './Cycles'
-// import './App.css';
+import Weather from './Weather'
 
 function App() {
   return (
-    <section class="section">
+    <section className="section">
       <div className="container">
         <Cycles />
+        <Weather />
       </div>
     </section>
   );

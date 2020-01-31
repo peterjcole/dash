@@ -1,20 +1,27 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+
 
 export default function CycleTable(props) {
   return (
     <>
+      <h1 className="title">Cycles</h1>
       {props.cycleStationOccupancy.map((stationGroup, index) => {
         return (
-          <table className="table" key={"cycleStations" + index}>
-            <CycleHeaders />
-            <tbody key="cycleBody + index">
-              <CycleRows stationGroup={stationGroup} />
-            </tbody>
-          </table>    
+            <table className="table" key={"cycleStations" + index}>
+              <CycleHeaders />
+              <tbody key="cycleBody + index">
+                <CycleRows stationGroup={stationGroup} />
+              </tbody>
+            </table>    
         )
       })}
     </>
   )
+}
+
+CycleTable.propTypes = {
+  cycleStationOccupancy: PropTypes.array.isRequired
 }
 
 function CycleHeaders(props) {

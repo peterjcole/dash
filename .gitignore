@@ -25,3 +25,4 @@ yarn-error.log*
 #env
 .env
 src/config.js
+src/WeatherSample.json

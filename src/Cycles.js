@@ -11,14 +11,15 @@ export default class Cycles extends React.Component {
     this.state = { 
       cycleStationOccupancy: []
     }
+    
+  }
+
+  componentDidMount() {
     this.getAllGroupsOccupancy()
   }
 
   getAllGroupsOccupancy = () => {
     stations.forEach((stationGroup, index) => setTimeout(() => this.getSingleGroupOccupancy(stationGroup, index), 500))
-
-    console.log(cycleStationOccupancyUrl + stations)
-
   }
 
   getSingleGroupOccupancy = (stationGroup, index) => {
