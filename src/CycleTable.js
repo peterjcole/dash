@@ -5,9 +5,9 @@ export default function CycleTable(props) {
     <>
       {props.cycleStationOccupancy.map((stationGroup, index) => {
         return (
-          <table id={"cycleStations" + index}>
+          <table key={"cycleStations" + index}>
             <CycleHeaders />
-            <tbody>
+            <tbody key="cycleBody + index">
               <CycleRows stationGroup={stationGroup} />
             </tbody>
           </table>    
@@ -28,12 +28,13 @@ function CycleHeaders(props) {
 }
 
 function CycleRows(props) {
-  return props.stationGroup.map (station => {
+  console.log(props)
+  return props.stationGroup && props.stationGroup.map(station => {
     return (
       <tr key={station.id}>
-        <td>{station.name}</td>
-        <td>{station.bikesCount}</td>
-        <td>{station.emptyDocks}</td>
+        <td key={station.id + 'Name'}>{station.name}</td>
+        <td key={station.id + 'Count'}>{station.bikesCount}</td>
+        <td key={station.id + 'emptyDocks'}>{station.emptyDocks}</td>
       </tr>
     )
   })

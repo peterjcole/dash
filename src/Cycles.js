@@ -15,8 +15,7 @@ export default class Cycles extends React.Component {
   }
 
   getAllGroupsOccupancy = () => {
-
-    stations.forEach((stationGroup, index) => this.getSingleGroupOccupancy(stationGroup, index))
+    stations.forEach((stationGroup, index) => setTimeout(() => this.getSingleGroupOccupancy(stationGroup, index), 500))
 
     console.log(cycleStationOccupancyUrl + stations)
 
@@ -25,13 +24,18 @@ export default class Cycles extends React.Component {
   getSingleGroupOccupancy = (stationGroup, index) => {
     return fetch(cycleStationOccupancyUrl + stationGroup)
     .then((response) => {
-      return response.json()
+      if (response.status >= 200 && response.status < 300) {
+        return response.json()
+      } else return Promise.reject()
     })
     .then((stationGroupOccupancy) => {
       const cycleStationOccupancy = this.state.cycleStationOccupancy
       cycleStationOccupancy[index] = stationGroupOccupancy
       this.setState({ cycleStationOccupancy })
-    });
+    })
+    .catch (err => {
+      setTimeout(() => this.getSingleGroupOccupancy(stationGroup, index), 2000)
+    })
   }
 
   render() {
