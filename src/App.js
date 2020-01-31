@@ -4,9 +4,11 @@ import Cycles from './Cycles'
 
 function App() {
   return (
-    <div className="App">
-      <Cycles />
-    </div>
+    <section class="section">
+      <div className="container">
+        <Cycles />
+      </div>
+    </section>
   );
 }
 

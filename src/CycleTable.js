@@ -5,7 +5,7 @@ export default function CycleTable(props) {
     <>
       {props.cycleStationOccupancy.map((stationGroup, index) => {
         return (
-          <table key={"cycleStations" + index}>
+          <table className="table" key={"cycleStations" + index}>
             <CycleHeaders />
             <tbody key="cycleBody + index">
               <CycleRows stationGroup={stationGroup} />
