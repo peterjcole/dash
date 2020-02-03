@@ -1,6 +1,5 @@
 import React from 'react'
 // import weather from './WeatherSample.json'
-import { weatherSites } from './config'
 import WeatherTable from './WeatherTable'
 
 const weatherUrl = new URL('https://api-metoffice.apiconnect.ibmcloud.com/metoffice/production/v0/forecasts/point/hourly')
@@ -17,6 +16,7 @@ export default class Weather extends React.Component {
   }
 
   getAllWeather() {
+    const weatherSites = JSON.parse(process.env.REACT_APP_WEATHER_SITES)
     weatherSites.forEach((latLng, index) => this.getSingleSiteWeather(latLng, index))
   }
 

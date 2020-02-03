@@ -1,5 +1,5 @@
 import React from 'react';
-import { stations } from './config'
+// import { stations } from './config'
 import CycleTable from './CycleTable'
 
 const cycleStationOccupancyUrl = 'https://api.tfl.gov.uk/Occupancy/BikePoints/'
@@ -19,6 +19,7 @@ export default class Cycles extends React.Component {
   }
 
   getAllGroupsOccupancy = () => {
+    const stations = JSON.parse(process.env.REACT_APP_BIKE_STATIONS)
     stations.forEach((stationGroup, index) => setTimeout(() => this.getSingleGroupOccupancy(stationGroup, index), 500))
   }
 
