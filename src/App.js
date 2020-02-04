@@ -1,6 +1,7 @@
 import React from 'react';
 import Cycles from './Cycles'
 import Weather from './Weather'
+import Trains from './Trains'
 
 function App() {
   return (
@@ -8,6 +9,7 @@ function App() {
       <div className="container">
         <Cycles />
         <Weather />
+        <Trains />
       </div>
     </section>
   );

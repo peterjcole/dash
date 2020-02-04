@@ -1,5 +1,4 @@
 import React from 'react';
-// import { stations } from './config'
 import CycleTable from './CycleTable'
 
 const cycleStationOccupancyUrl = 'https://api.tfl.gov.uk/Occupancy/BikePoints/'
