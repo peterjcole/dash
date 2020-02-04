@@ -39,8 +39,8 @@ function CycleRows(props) {
     return (
       <tr key={station.id}>
         <td key={station.id + 'Name'}>{station.name}</td>
-        <th key={station.id + 'Count'}>{station.bikesCount}</th>
-        <th key={station.id + 'emptyDocks'}>{station.emptyDocks}</th>
+        <td key={station.id + 'Count'}>{station.bikesCount}</td>
+        <td key={station.id + 'emptyDocks'}>{station.emptyDocks}</td>
       </tr>
     )
   })

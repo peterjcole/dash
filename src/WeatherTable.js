@@ -10,7 +10,7 @@ export default function WeatherTable(props) {
         return (
           <React.Fragment key={index}>
             <h2 className="subtitle is-4">{siteWeather.features[0].properties.location.name}</h2>
-            <h2 className="subtitle is-5">{`Between ${props.commutingHours.start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} and ${props.commutingHours.end.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`}</h2>
+            <h2 className="subtitle is-5">{`Between ${formatTime(props.commutingHours.start)} and ${formatTime(props.commutingHours.end)}`}</h2>
             <WeatherStats siteWeather={siteWeather} />
             <table className='table'>
               <WeatherHeaders />
@@ -25,13 +25,17 @@ export default function WeatherTable(props) {
   )
 }
 
+function formatTime(time) {
+  return time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+}
+
 function WeatherHeaders(props) {
   return <thead>
     <tr key="weatherHeaderRow">
       <td key="time">Time</td>
       <td key="feelsLike">Feels like temp</td>
       <td key="actual">Actual temp</td>
-      <td key="weatherType">Weather type</td>
+      <td key="weatderType">Weatder type</td>
       <td key="precipProb">Precip probability</td>
     </tr>
   </thead>
@@ -44,7 +48,7 @@ function WeatherRows(props) {
     .map(timeItem => {
       return (
         <tr key={timeItem.time}>
-          <td key={timeItem.time + "time"}>{new Date(timeItem.time).toLocaleTimeString()}</td>
+          <th key={timeItem.time + "time"}>{formatTime(new Date(timeItem.time))}</th>
           <td key={timeItem.time + "feelsLike"}>{parseFloat(timeItem.feelsLikeTemperature).toFixed(1)}</td>
           <td key={timeItem.time + "actual"}>{parseFloat(timeItem.screenTemperature).toFixed(1)}</td>
           <td key={timeItem.time + "weatherType"}>{SignificantWeatherCodes[timeItem.significantWeatherCode]}</td>
@@ -79,34 +83,22 @@ function WeatherStats(props) {
 
   return (
     <nav className="level">
-      <div className="level-item has-text-centered" key="max-feels-like">
+      <div className="level-item has-text-centered" key="max">
         <div>
-          <p className="heading" key="heading">Max feels like temp</p>
-          <p className="title" key="title">{maxFeelsLike} °C</p>
+          <p className="heading" key="heading">Max feels like/actual temp</p>
+          <p className="title" key="value">{maxFeelsLike}°C / {maxTemp}°C</p>
         </div>
       </div>
-      <div className="level-item has-text-centered" key="min-feels-like">
+      <div className="level-item has-text-centered " key="min-feels-like">
         <div>
-          <p className="heading" key="heading">Min feels like temp</p>
-          <p className="title" key="title">{minFeelsLike} °C</p>
-        </div>
-      </div>
-      <div className="level-item has-text-centered" key="max-temp">
-        <div>
-          <p className="heading" key="heading">Max temp</p>
-          <p className="title" key="title">{maxTemp} °C</p>
-        </div>
-      </div>
-      <div className="level-item has-text-centered" key="min-temp">
-        <div>
-          <p className="heading" key="heading">Min temp</p>
-          <p className="title" key="title">{minTemp} °C</p>
+          <p className="heading" key="heading">Min feels like/actual temp</p>
+          <p className="title" key="value">{minFeelsLike}°C / {minTemp}°C</p>
         </div>
       </div>
       <div className="level-item has-text-centered" key="prob-precip">
         <div>
           <p className="heading" key="heading">Probability of any precipitation</p>
-          <p className="title" key="title">{maxPrecip}%</p>
+          <p className="title" key="value">{maxPrecip}%</p>
         </div>
       </div>
     </nav>
