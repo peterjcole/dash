@@ -1,5 +1,4 @@
 import React from 'react'
-// import weather from './WeatherSample.json'
 import WeatherTable from './WeatherTable'
 
 const weatherUrl = new URL('https://api-metoffice.apiconnect.ibmcloud.com/metoffice/production/v0/forecasts/point/hourly')
@@ -8,10 +7,26 @@ export default class Weather extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = {weather: []}
+
+    const commutingHours = {
+      start: new Date(),
+      end: new Date()
+    }
+
+    commutingHours.start.setHours(process.env.REACT_APP_COMMUTE_START || 0)
+    commutingHours.end.setHours(process.env.REACT_APP_COMMUTE_END || 23)
+    commutingHours.start.setMinutes(0)
+    commutingHours.end.setMinutes(0)
+    
+    this.state = {
+      weather: [],
+      commutingHours
+    }
+
   }
 
   componentDidMount() {
+    
     this.getAllWeather()
   }
 
@@ -38,7 +53,12 @@ export default class Weather extends React.Component {
       } else return Promise.reject()
     })
     .then((siteWeather) => {
-      const weather = this.state.weather
+      const weather = [...this.state.weather]
+      const timeSeries = siteWeather.features[0].properties.timeSeries
+      siteWeather.features[0].properties.timeSeries = timeSeries.filter(weather => {
+        const time = new Date(weather.time)
+        return time > this.state.commutingHours.start && time < this.state.commutingHours.end
+      })
       weather[index] = siteWeather
       this.setState({ weather })
     })
@@ -48,6 +68,6 @@ export default class Weather extends React.Component {
   }
 
   render() {
-    return <WeatherTable weather={this.state.weather}/>
+    return <WeatherTable weather={this.state.weather} commutingHours={this.state.commutingHours}/>
   }
 }

@@ -1,9 +1,8 @@
 import React from 'react'
 
 export function TrainTable(props) {
-  console.log(props.trainJourneys)
   return (
-    <>
+    <section className="section">
       <h1 key="train-title" className="title">Trains</h1>
       {props.trainJourneys.map((journey, index) => {
         return journey && <React.Fragment key={index}>
@@ -16,7 +15,7 @@ export function TrainTable(props) {
           </table>
         </React.Fragment>
       })}
-    </>
+    </section>
   )
 }
 

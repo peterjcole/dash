@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 
 export default function CycleTable(props) {
   return (
-    <>
+    <section className="section">
       <h1 className="title">Cycles</h1>
       {props.cycleStationOccupancy.map((stationGroup, index) => {
         return (
@@ -16,7 +16,7 @@ export default function CycleTable(props) {
             </table>    
         )
       })}
-    </>
+    </section>
   )
 }
 
@@ -35,13 +35,12 @@ function CycleHeaders(props) {
 }
 
 function CycleRows(props) {
-  console.log(props)
   return props.stationGroup && props.stationGroup.map(station => {
     return (
       <tr key={station.id}>
         <td key={station.id + 'Name'}>{station.name}</td>
-        <td key={station.id + 'Count'}>{station.bikesCount}</td>
-        <td key={station.id + 'emptyDocks'}>{station.emptyDocks}</td>
+        <th key={station.id + 'Count'}>{station.bikesCount}</th>
+        <th key={station.id + 'emptyDocks'}>{station.emptyDocks}</th>
       </tr>
     )
   })
