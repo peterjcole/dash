@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+node_modules
 /.pnp
 .pnp.js
 
@@ -10,6 +11,8 @@
 
 # production
 /build
+/dist
+/packages/client/build
 
 # misc
 .DS_Store
@@ -26,3 +29,5 @@ yarn-error.log*
 .env
 src/config.js
 src/WeatherSample.json
+
+.now
