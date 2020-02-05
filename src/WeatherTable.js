@@ -60,6 +60,7 @@ function WeatherRows(props) {
 
 function WeatherStats(props) {
   const timeSeries = props.siteWeather.features[0].properties.timeSeries
+
   const maxTemp = parseFloat(timeSeries.reduce((accumulator, currentValue) => {
     return currentValue.screenTemperature > accumulator ? currentValue.screenTemperature : accumulator
   }, null)).toFixed(1)  
@@ -70,11 +71,11 @@ function WeatherStats(props) {
 
   const minTemp = parseFloat(timeSeries.reduce((accumulator, currentValue) => {
     return currentValue.screenTemperature < accumulator ? currentValue.screenTemperature : accumulator
-  }, timeSeries[0].screenTemperature)).toFixed(1)
+  }, timeSeries[0] ? timeSeries[0].screenTemperature : 0)).toFixed(1)
 
   const minFeelsLike = parseFloat(timeSeries.reduce((accumulator, currentValue) => {
     return currentValue.feelsLikeTemperature < accumulator ? currentValue.feelsLikeTemperature : accumulator
-  }, timeSeries[0].feelsLikeTemperature)).toFixed(1)
+  }, timeSeries[0] ? timeSeries[0].feelsLikeTemperature : 0)).toFixed(1)
 
   const maxPrecip = timeSeries.reduce((accumulator, currentValue) => {
     return currentValue.probOfPrecipitation > accumulator ? currentValue.probOfPrecipitation : accumulator
