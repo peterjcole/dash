@@ -1,7 +1,8 @@
 import React from 'react'
 import WeatherTable from './WeatherTable'
 
-const weatherUrl = new URL('https://api-metoffice.apiconnect.ibmcloud.com/metoffice/production/v0/forecasts/point/hourly')
+const weatherUrl = process.env.REACT_APP_API_URL + '/weather'
+
 
 export default class Weather extends React.Component {
 
@@ -26,44 +27,31 @@ export default class Weather extends React.Component {
   }
 
   componentDidMount() {
-    
-    this.getAllWeather()
+    this.getWeather()
   }
 
-  getAllWeather() {
-    const weatherSites = JSON.parse(process.env.REACT_APP_WEATHER_SITES)
-    weatherSites.forEach((latLng, index) => this.getSingleSiteWeather(latLng, index))
-  }
-
-  getSingleSiteWeather(latLng, index) {
-    weatherUrl.searchParams.append('excludeParameterMetadata', true)
-    weatherUrl.searchParams.append('includeLocationName', true)
-    weatherUrl.searchParams.append('latitude', latLng[0])
-    weatherUrl.searchParams.append('longitude', latLng[1])
-    return fetch(weatherUrl, {
-      headers: {
-        'accept': 'application/json',
-        'x-ibm-client-id': process.env.REACT_APP_MET_OFFICE_DATAHUB_CLIENT_ID,
-        'x-ibm-client-secret': process.env.REACT_APP_MET_OFFICE_DATAHUB_CLIENT_SECRET
-      },
-    })
-    .then((response) => {
+  getWeather() {
+    return fetch(weatherUrl, { mode: 'cors' })
+    .then(response => {
       if (response.status >= 200 && response.status < 300) {
         return response.json()
       } else return Promise.reject()
+      
     })
-    .then((siteWeather) => {
-      const weather = [...this.state.weather]
-      const timeSeries = siteWeather.features[0].properties.timeSeries
-      siteWeather.features[0].properties.timeSeries = timeSeries.filter(weather => {
-        const time = new Date(weather.time)
-        return time > this.state.commutingHours.start && time < this.state.commutingHours.end
+    .then(weather => {
+      weather.forEach(site => {
+        let timeSeries = site.features[0].properties.timeSeries
+        site.features[0].properties.timeSeries = timeSeries.filter(weatherPeriod => {
+          const time = new Date(weatherPeriod.time)
+          return time > this.state.commutingHours.start && time < this.state.commutingHours.end
+        })
       })
-      weather[index] = siteWeather
-      this.setState({ weather })
+      
+      return weather
     })
+    .then(weather => this.setState({ weather }))
     .catch (err => {
-      setTimeout(() => this.getSingleSiteWeather(latLng, index), 2000)
+      setTimeout(() => this.getWeather(), 1000)
     })
   }
 
