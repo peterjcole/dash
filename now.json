@@ -1,13 +1,29 @@
 {
   "env": {
     "CUSTOM_BIKE_STATIONS": "@bike-stations",
-    "REACT_APP_BIKE_STATIONS": "@bike-stations",
     "REACT_APP_COMMUTE_START": "@commute-start",
     "REACT_APP_COMMUTE_END": "@commute-end",
-    "REACT_APP_MET_OFFICE_DATAHUB_CLIENT_ID": "@metoffice-id",
-    "REACT_APP_MET_OFFICE_DATAHUB_CLIENT_SECRET": "@metoffice-secret",
-    "REACT_APP_NATIONAL_RAIL_HUXLEY_URL": "@huxley-url",
-    "REACT_APP_TRAIN_JOURNEYS": "@train-journeys",
-    "REACT_APP_WEATHER_SITES": "@weather-sites"
-  }
+    "MET_OFFICE_DATAHUB_CLIENT_ID": "@metoffice-id",
+    "MET_OFFICE_DATAHUB_CLIENT_SECRET": "@metoffice-secret",
+    "NATIONAL_RAIL_HUXLEY_URL": "@huxley-url",
+    "TRAIN_JOURNEYS": "@train-journeys",
+    "WEATHER_SITES": "@weather-sites",
+    "NODEJS_AWS_HANDLER_NAME": "handler"
+  },
+  "build": {
+    "env": {
+      "REACT_APP_API_URL": "@api-url"
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers" : [
+        {
+          "key" : "Access-Control-Allow-Origin",
+          "value" : "*"
+        }
+      ]
+    }
+  ]
 }

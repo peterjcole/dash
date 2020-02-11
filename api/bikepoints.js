@@ -6,9 +6,7 @@ const stations = JSON.parse(process.env.CUSTOM_BIKE_STATIONS)
 module.exports = async (req, res) => {
   const occupancies = await fetchBikeStationOccupancies()
 
-  res.json({
-    occupancies
-  })
+  res.json(occupancies)
 }
 
 function fetchBikeStationOccupancies () {

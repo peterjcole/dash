@@ -4,7 +4,8 @@ export function TrainTable(props) {
   return (
     <section className="section">
       <h1 key="train-title" className="title">Trains</h1>
-      {props.trainJourneys.map((journey, index) => {
+      { props.trainJourneys && props.trainJourneys.map((journey, index) => {
+        console.log(journey)
         return journey && <React.Fragment key={index}>
           <h2 className="subtitle is-4">{`${journey.services[0] && journey.services[0].locationName} to ${journey.services[0] && journey.services[0].userDestination.locationName}`}</h2>
           <TrainStats journey={journey} />
