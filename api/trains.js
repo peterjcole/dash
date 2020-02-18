@@ -12,16 +12,23 @@ module.exports = async (req, res) => {
 function fetchTrains () {
   return Promise.all(
     userJourneys.map(async journey => {
-      const queryUrl = `${url}/departures/${journey[0]}/to/${journey[1]}`
+      const [origin, destination] = journey
+      const queryUrl = `${url}/departures/${origin}/to/${destination}`
       return { services: await fetch(queryUrl)
       .then(response => response.json())
       .then(journeyDetails => {
         return Promise.all(journeyDetails.trainServices.map(async service => {
-          return fetchServiceDetails(service, journey[1])
+          return fetchServiceDetails(service, destination)
         }))
-      }) }
+      })}
     })
-  )
+  ).then(journey => {
+    journey.services = journey.services && journey.services.filter(service => {
+      console.log(service)
+      return service.message !== 'An error has occurred.'})
+    .sort((service1, service2) => Date.parse(service1.std) > Date.parse(service2.std))
+    return journey
+  })
 }
 
 function fetchServiceDetails (service, destination) {
@@ -29,8 +36,9 @@ function fetchServiceDetails (service, destination) {
   return fetch(serviceQueryUrl)
   .then(response => response.json())
   .then(serviceDetails => {
-    const callingPoints = serviceDetails.subsequentCallingPoints[0].callingPoint
-    serviceDetails.userDestination = callingPoints.filter(callingPoint => callingPoint.crs === destination)[0]
+    if (serviceDetails === { message: 'An error has occurred.' }) return Promise.reject()
+    const callingPoints = serviceDetails.subsequentCallingPoints ? serviceDetails.subsequentCallingPoints[0].callingPoint : []
+    serviceDetails.userDestination = callingPoints.find(callingPoint => callingPoint.crs === destination)
     return serviceDetails
   })
 }

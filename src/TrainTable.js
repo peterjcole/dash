@@ -63,6 +63,7 @@ function TrainHeaders(props) {
 }
 
 function TrainRows(props) {
+  console.log(props.trainJourney)
   return props.trainJourney.services.map((service, index) => {
     return (
     <tr key={props.journeyNum + index}>
