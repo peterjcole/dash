@@ -5,10 +5,12 @@ const cycleStationOccupancyUrl = process.env.REACT_APP_API_URL + '/bikepoints'
 
 export default class Cycles extends React.Component {
 
-  constructor () {
+  constructor() {
     super()
-    this.state = { 
-      cycleStationOccupancy: []
+    this.state = {
+      cycleStationOccupancy: [],
+      lastUpdated: null,
+      loaded: false
     }
   }
 
@@ -16,22 +18,28 @@ export default class Cycles extends React.Component {
     this.getOccupancy()
   }
 
-  getOccupancy = () => {    
-    return fetch(cycleStationOccupancyUrl, { mode: 'cors' })
-    .then((response) => {
-      if (response.status >= 200 && response.status < 300) {
-        return response.json()
-      } else return Promise.reject()
-    })
-    .then((cycleStationOccupancy) => {
-      this.setState({ cycleStationOccupancy })
-    })
-    .catch (err => {
-      setTimeout(() => this.getOccupancy(), 1000)
+  getOccupancy = () => {
+    this.setState({ loaded: false }, () => {
+      fetch(cycleStationOccupancyUrl, { mode: 'cors' })
+          .then((response) => {
+            if (response.status >= 200 && response.status < 300) {
+              return response.json()
+            } else return Promise.reject()
+          })
+          .then((cycleStationOccupancy) => {
+            this.setState({ cycleStationOccupancy, lastUpdated: Date.now(), loaded: true })
+          })
+          .catch(err => {
+            setTimeout(() => this.getOccupancy(), 1000)
+          })
     })
   }
 
+  handleRefresh = () => {
+    this.getOccupancy();
+  }
+
   render() {
-    return <CycleTable cycleStationOccupancy={this.state.cycleStationOccupancy} />
+    return <CycleTable cycleStationOccupancy={this.state.cycleStationOccupancy} lastUpdated={this.state.lastUpdated} handleRefresh={this.handleRefresh} loaded={this.state.loaded}/>
   }
 }

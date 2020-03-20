@@ -24,7 +24,6 @@ function fetchTrains () {
     })
   ).then(journey => {
     journey.services = journey.services && journey.services.filter(service => {
-      console.log(service)
       return service.message !== 'An error has occurred.'})
     .sort((service1, service2) => Date.parse(service1.std) > Date.parse(service2.std))
     return journey

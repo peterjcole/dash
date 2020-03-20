@@ -1,21 +1,42 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faRedoAlt } from '@fortawesome/free-solid-svg-icons'
+import TimeAgo from 'timeago-react';
+import BeatLoader from "react-spinners/BeatLoader";
+
 
 
 export default function CycleTable(props) {
   return (
     <section className="section">
-      <h1 className="title">Cycles</h1>
-      {props.cycleStationOccupancy.map((stationGroup, index) => {
+      <nav className="level">
+        <div class="level-left">
+          <div class="level-item"><h1 className="title">Cycles</h1></div>
+        </div>
+        <div class="level-right">
+          <div class="level-item">
+            <span class="has-text-grey is-size-6">Last updated: {props.lastUpdated ? <TimeAgo datetime={props.lastUpdated} /> : "never"}</span>
+          </div>
+          <div class="level-item">
+            <button className="button" onClick={props.handleRefresh}>
+              <span class="icon is-small"><FontAwesomeIcon icon={faRedoAlt} /></span>
+              <span>Refresh</span>
+            </button>
+          </div>
+        </div>
+      </nav>
+      
+      {props.loaded ? props.cycleStationOccupancy.map((stationGroup, index) => {
         return (
-            <table className="table" key={"cycleStations" + index}>
-              <CycleHeaders />
-              <tbody key="cycleBody + index">
-                <CycleRows stationGroup={stationGroup} />
-              </tbody>
-            </table>    
+          <table className="table" key={"cycleStations" + index}>
+            <CycleHeaders />
+            <tbody key="cycleBody + index">
+              <CycleRows stationGroup={stationGroup} />
+            </tbody>
+          </table>
         )
-      })}
+      }) : <BeatLoader />}
     </section>
   )
 }
