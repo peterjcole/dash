@@ -7,7 +7,7 @@ export function TrainTable(props) {
       { props.trainJourneys && props.trainJourneys.map((journey, index) => {
         console.log(journey)
         return journey && <React.Fragment key={index}>
-          <h2 className="subtitle is-4">{`${journey.services[0] && journey.services[0].locationName} to ${journey.services[0] && journey.services[0].userDestination.locationName}`}</h2>
+          <h2 className="subtitle is-4">{`${journey.services[0] && journey.services[0].locationName} to ${journey.services[0].userDestination && journey.services[0].userDestination.locationName}`}</h2>
           <TrainStats journey={journey} />
           <table className="table">
             <TrainHeaders />
@@ -70,7 +70,7 @@ function TrainRows(props) {
       <th key={props.journeyNum + "predictedDep"}>{service.etd === "On time" ? service.std : service.etd}</th>
       <td key={props.journeyNum + "platform"}>{service.platform}</td>
       <td key={props.journeyNum + "numCarriages"}>{service.length || "Unknown"}</td>
-      <td key={props.journeyNum + "predictedArr"}>{service.userDestination.et === "On time" ? service.userDestination.st : service.userDestination.et}</td>
+      <td key={props.journeyNum + "predictedArr"}>{service.userDestination && (service.userDestination.et === "On time" ? service.userDestination.st : service.userDestination.et)}</td>
     </tr>
     )
   })

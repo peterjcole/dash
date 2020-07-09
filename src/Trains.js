@@ -23,7 +23,7 @@ export default class Trains extends React.Component {
       } else return Promise.reject()
     })
     .then((trainJourneys) => {
-      
+      console.log(trainJourneys)
       this.setState({ trainJourneys })
     })
     .catch (err => {

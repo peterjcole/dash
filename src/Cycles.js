@@ -40,6 +40,6 @@ export default class Cycles extends React.Component {
   }
 
   render() {
-    return <CycleTable cycleStationOccupancy={this.state.cycleStationOccupancy} lastUpdated={this.state.lastUpdated} handleRefresh={this.handleRefresh} loaded={this.state.loaded}/>
+    return <CycleTable cycleStationOccupancy={[this.state.cycleStationOccupancy[0]]} lastUpdated={this.state.lastUpdated} handleRefresh={this.handleRefresh} loaded={this.state.loaded}/>
   }
 }

@@ -4,7 +4,7 @@ import { SignificantWeatherCodes } from './SignificantWeatherCodes'
 
 export default function WeatherTable(props) {
   return (
-    <section className="section">
+    <section className="section is-collapsible">
       <h1 key="weather-title" className="title">Weather</h1>
       {props.weather.map((siteWeather, index) => {
         return (

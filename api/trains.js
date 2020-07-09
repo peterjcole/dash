@@ -9,35 +9,36 @@ module.exports = async (req, res) => {
   res.json(occupancies)
 }
 
-function fetchTrains () {
+function fetchTrains() {
   return Promise.all(
     userJourneys.map(async journey => {
       const [origin, destination] = journey
       const queryUrl = `${url}/departures/${origin}/to/${destination}`
-      return { services: await fetch(queryUrl)
-      .then(response => response.json())
-      .then(journeyDetails => {
-        return Promise.all(journeyDetails.trainServices.map(async service => {
-          return fetchServiceDetails(service, destination)
-        }))
-      })}
+      return {
+        services: await fetch(queryUrl)
+          .then(response => response.json())
+          .then(journeyDetails => {
+            return Promise.all(journeyDetails.trainServices.map(async service => {
+              return fetchServiceDetails(service, destination)
+            }))
+          })
+      }
     })
   ).then(journey => {
-    journey.services = journey.services && journey.services.filter(service => {
-      return service.message !== 'An error has occurred.'})
-    .sort((service1, service2) => Date.parse(service1.std) > Date.parse(service2.std))
+    journey.services = journey.services && journey.services.filter(service => service !== null)
+      .sort((service1, service2) => Date.parse(service1.std) > Date.parse(service2.std))
     return journey
   })
 }
 
-function fetchServiceDetails (service, destination) {
+function fetchServiceDetails(service, destination) {
   const serviceQueryUrl = `${url}/service/${service.serviceID}`
   return fetch(serviceQueryUrl)
-  .then(response => response.json())
-  .then(serviceDetails => {
-    if (serviceDetails === { message: 'An error has occurred.' }) return Promise.reject()
-    const callingPoints = serviceDetails.subsequentCallingPoints ? serviceDetails.subsequentCallingPoints[0].callingPoint : []
-    serviceDetails.userDestination = callingPoints.find(callingPoint => callingPoint.crs === destination)
-    return serviceDetails
-  })
+    .then(response => response.json())
+    .then(serviceDetails => {
+      if (serviceDetails.message === 'An error has occurred.') return null
+      const callingPoints = serviceDetails.subsequentCallingPoints ? serviceDetails.subsequentCallingPoints[0].callingPoint : []
+      serviceDetails.userDestination = callingPoints.find(callingPoint => callingPoint.crs === destination)
+      return serviceDetails
+    })
 }
